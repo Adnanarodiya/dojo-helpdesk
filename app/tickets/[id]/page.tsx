@@ -1,8 +1,8 @@
 import { Ticket } from "@/app/utils/types";
 import { notFound } from "next/navigation";
 
-// export const dynamicParams = true;
-
+// |> what is the use of this ? export const dynamicParams = true;
+// |> static rendering how ??
 export async function getStaticParams() {
   const res = await fetch("http://localhost:4000/tickets");
 
