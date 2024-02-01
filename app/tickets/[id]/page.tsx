@@ -1,4 +1,16 @@
 import { Ticket } from "@/app/utils/types";
+import { notFound } from "next/navigation";
+
+// export const dynamicParams = true;
+
+export async function getStaticParams() {
+  const res = await fetch("http://localhost:4000/tickets");
+
+  const tickets = await res.json();
+  return tickets.map((ticket: Ticket) => ({
+    params: { id: ticket.id },
+  }));
+}
 
 async function getTicket(id: string) {
   const res = await fetch("http://localhost:4000/tickets/" + id, {
@@ -6,6 +18,10 @@ async function getTicket(id: string) {
       revalidate: 60,
     },
   });
+
+  if (!res.ok) {
+    notFound();
+  }
 
   return res.json();
 }
