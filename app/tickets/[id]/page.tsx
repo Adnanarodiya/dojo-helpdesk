@@ -1,7 +1,8 @@
 import { Ticket } from "@/app/utils/types";
 import { notFound } from "next/navigation";
 
-// |> what is the use of this ? export const dynamicParams = true;
+// |> what is the use of this ?
+export const dynamicParams = true;
 // |> static rendering how ??
 export async function getStaticParams() {
   const res = await fetch("http://localhost:4000/tickets");
@@ -13,6 +14,9 @@ export async function getStaticParams() {
 }
 
 async function getTicket(id: string) {
+  // |> imitate delay
+  await new Promise((resolve) => setTimeout(resolve, 3000));
+
   const res = await fetch("http://localhost:4000/tickets/" + id, {
     next: {
       revalidate: 60,
