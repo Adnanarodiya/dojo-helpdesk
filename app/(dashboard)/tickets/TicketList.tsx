@@ -1,5 +1,5 @@
+import { Ticket } from "@/app/utils/types";
 import Link from "next/link";
-import { Ticket } from "../utils/types";
 
 async function getTickets() {
   // |> imitate delay

@@ -3,8 +3,18 @@ import { notFound } from "next/navigation";
 
 // |> what is the use of this ?
 export const dynamicParams = true;
+
+export async function generateMetadata({ params }: { params: { id: string } }) {
+  const id = params.id;
+  const res = await fetch(`http://localhost:4000/tickets/${id}`);
+  const ticket = await res.json();
+  return {
+    title: `Dojo Helpdesk |  ${ticket.title}`,
+  };
+}
+
 // |> static rendering how ??
-export async function getStaticParams() {
+async function getStaticParams() {
   const res = await fetch("http://localhost:4000/tickets");
 
   const tickets = await res.json();
