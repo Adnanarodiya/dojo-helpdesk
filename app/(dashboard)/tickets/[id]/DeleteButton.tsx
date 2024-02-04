@@ -22,8 +22,8 @@ export default function DeleteIcon({ id }: { id: string }) {
       setIsLoading(false);
     }
     if (!json.error) {
-      router.refresh();
       router.push("/tickets");
+      router.refresh();
     }
   };
 

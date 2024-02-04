@@ -33,8 +33,8 @@ export default function CreateForm() {
       console.log("error.message");
     }
     if (json.data) {
-      router.refresh();
       router.push("/tickets");
+      router.refresh();
     }
   };
 
