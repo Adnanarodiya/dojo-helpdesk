@@ -1,66 +1,55 @@
-import { Ticket } from "@/app/utils/types";
 import { notFound } from "next/navigation";
+import { cookies } from "next/headers";
+import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 
-// |> what is the use of this ?
 export const dynamicParams = true;
 
-export async function generateMetadata({ params }: { params: { id: string } }) {
-  const id = params.id;
-  const res = await fetch(`http://localhost:4000/tickets/${id}`);
-  const ticket = await res.json();
+export async function generateMetadata({ params }: { params: any }) {
+  const supabase = createServerComponentClient({ cookies });
+
+  const { data: ticket } = await supabase
+    .from("tickets")
+    .select()
+    .eq("id", params.id)
+    .single();
+
   return {
-    title: `Dojo Helpdesk |  ${ticket.title}`,
+    title: `Dojo Helpdesk | ${ticket?.title || "Ticket not Found"}`,
   };
 }
 
-// |> static rendering how ??
-async function getStaticParams() {
-  const res = await fetch("http://localhost:4000/tickets");
+async function getTicket(id: any) {
+  const supabase = createServerComponentClient({ cookies });
 
-  const tickets = await res.json();
-  return tickets.map((ticket: Ticket) => ({
-    params: { id: ticket.id },
-  }));
-}
+  const { data } = await supabase
+    .from("Tickets")
+    .select()
+    .eq("id", id)
+    .single();
 
-async function getTicket(id: string) {
-  // |> imitate delay
-  await new Promise((resolve) => setTimeout(resolve, 3000));
-
-  const res = await fetch("http://localhost:4000/tickets/" + id, {
-    next: {
-      revalidate: 60,
-    },
-  });
-
-  if (!res.ok) {
+  if (!data) {
     notFound();
   }
 
-  return res.json();
+  return data;
 }
 
-export default async function TicketDetails({
-  params,
-}: {
-  params: { id: string };
-}) {
-  const ticket: Ticket = await getTicket(params.id);
+export default async function TicketDetails({ params }: { params: any }) {
+  const ticket = await getTicket(params.id);
+
   return (
-    <>
-      <main>
-        <nav>
-          <h2>Ticket Details</h2>
-        </nav>
-        <div className="card">
-          <h3>{ticket.title}</h3>
-          <small>Created by {ticket.user_email} </small>
-          <p>{ticket.body}</p>
-          <div className={`pill ${ticket.priority}`}>
-            {ticket.priority} priority
-          </div>
+    <main>
+      <nav>
+        <h2>Ticket Details</h2>
+      </nav>
+      <div className="card">
+        <h3>{ticket.title}</h3>
+        <small>Created by {ticket.user_email}</small>
+        <p>{ticket.body}</p>
+        <div className={`pill ${ticket.priority}`}>
+          {ticket.priority} priority
         </div>
-      </main>
-    </>
+      </div>
+    </main>
   );
 }
