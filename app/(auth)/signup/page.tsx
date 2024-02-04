@@ -23,7 +23,7 @@ export default function Signup() {
       email,
       password,
       options: {
-        emailRedirectTo: `${location.origin}/api/auth/callback`,
+        emailRedirectTo: `${location.host}/api/auth/callback`,
       },
     });
     if (error) {
