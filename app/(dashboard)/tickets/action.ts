@@ -43,3 +43,21 @@ export async function deleteTicket(id: any) {
   revalidatePath("/tickets");
   redirect("/tickets");
 }
+
+export async function updateTicket(
+  formData: Iterable<[PropertyKey, any]>,
+  id: any
+) {
+  const ticket = Object.fromEntries(formData);
+
+  const supabase = createServerActionClient({ cookies });
+
+  const { error } = await supabase.from("Tickets").update(ticket).eq("id", id);
+
+  if (error) {
+    throw new Error("Could not update the ticket.");
+  }
+
+  revalidatePath("/tickets");
+  redirect("/tickets");
+}
