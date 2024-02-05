@@ -4,7 +4,6 @@ import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 
 // components
 import DeleteButton from "./DeleteButton";
-import EditButton from "./EditButton";
 
 export const dynamicParams = true;
 
@@ -65,18 +64,6 @@ export default async function TicketDetails({
         <div className={`pill ${ticket.priority}`}>
           {ticket.priority} priority
         </div>
-      </div>
-      {/* 
-      <div className="mx-auto">
-        <button className="mx-auto">
-          <EditButton id={ticket.id} />
-        </button>
-      </div> */}
-
-      <div className="flex justify-center">
-        {data?.session?.user.email === ticket.user_email && (
-          <EditButton id={ticket.id} />
-        )}
       </div>
     </main>
   );
