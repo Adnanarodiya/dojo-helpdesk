@@ -3,6 +3,7 @@ import { Tables } from "@/app/db.types";
 import React, { FormEvent, useState } from "react";
 import { updateTicket } from "../../action";
 import UpdateButton from "@/app/components/UpdateButton";
+// import UpdateButton from "@/app/components/UpdateButton";
 
 interface EditTicketProps {
   ticket: Tables<"Tickets">;
@@ -54,8 +55,7 @@ export default function EditTicket({ ticket }: EditTicketProps) {
           <option value="high">High Priority</option>
         </select>
       </label>
-      <div className="ml-auto">
-        {/* {=== ticket.user_email && <UpdateButton />} */}
+      <div className="mx-auto">
         <UpdateButton />
       </div>
     </form>

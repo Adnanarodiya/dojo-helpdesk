@@ -66,8 +66,10 @@ export default async function TicketDetails({
           {ticket.priority} priority
         </div>
       </div>
-      <div>
-        <EditButton id={ticket.id} />
+      <div className="flex justify-end">
+        {data?.session?.user.email === ticket.user_email && (
+          <EditButton id={ticket.id} />
+        )}
       </div>
     </main>
   );
