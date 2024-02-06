@@ -4,6 +4,7 @@ import { createServerActionClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import { Database, TablesUpdate } from "@/app/db.types";
 
 export async function addTicket(
   formData: Iterable<readonly [PropertyKey, any]>
@@ -42,4 +43,22 @@ export async function deleteTicket(id: any) {
 
   revalidatePath("/tickets");
   redirect("/tickets");
+}
+
+export async function updateTicket(
+  id: number,
+  ticket: TablesUpdate<"Tickets">
+) {
+  const supabase = createServerActionClient<Database>({ cookies });
+
+  const { error } = await supabase.from("Tickets").update(ticket).eq("id", id);
+  console.log(id);
+
+  if (error) {
+    throw new Error("Could not update the ticket.");
+  }
+  revalidatePath(`/tickets/${id}`);
+  redirect(`/tickets/${id}`);
+  // revalidatePath("/tickets");
+  // redirect("/tickets");
 }
